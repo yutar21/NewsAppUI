@@ -30,18 +30,17 @@ class DiscoverScreen extends StatelessWidget {
           ),
         ),
         bottomNavigationBar: const MyBottomNavBar(index: 1),
-        body:
-            SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  children: [
-                    const _DiscoverNews(),
-                    _CategoryNews(tabs: tabs),
-                  ],
-                ),
-              ),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              children: [
+                const _DiscoverNews(),
+                _CategoryNews(tabs: tabs),
+              ],
             ),
+          ),
+        ),
       ),
     );
   }
@@ -61,106 +60,111 @@ class _CategoryNews extends StatelessWidget {
     return Column(
       children: [
         TabBar(
-            isScrollable: true,
-            indicatorColor: Colors.black,
-            tabs: tabs
-                .map((tab) => Tab(
-                      icon: Text(
-                        tab,
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineSmall!
-                            .copyWith(fontWeight: FontWeight.bold),
-                      ),
-                    ))
-                .toList()),
-        SizedBox(
-          height: MediaQuery.of(context).size.height,
-          child: TabBarView(
+          isScrollable: true,
+          indicatorColor: Colors.black,
+          tabs: tabs
+              .map((tab) => Tab(
+                    icon: Text(
+                      tab,
+                      style: Theme.of(context)
+                          .textTheme
+                          .headlineSmall!
+                          .copyWith(fontWeight: FontWeight.bold),
+                    ),
+                  ))
+              .toList(),
+        ),
+        //bao listview trong 1 container chiem 47% man hinh
+        Container(
+          height: MediaQuery.of(context).size.height *
+              0.475, // Adjust height as needed
+          child: Expanded(
+            child: TabBarView(
+              physics: NeverScrollableScrollPhysics(),
               children: tabs
-                  .map((tab) =>
-                        ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: articles.length,
-                          itemBuilder: (context, index) {
-                            return InkWell(
-                              onTap: () {
-                                Navigator.pushNamed(
-                                    context, ArticleScreen.routeName,
-                                    arguments: articles[index]);
-                              },
-                              child: Row(
-                                children: [
-                                  ImageContainer(
-                                    margin: const EdgeInsets.all(10.0),
-                                    width: 80,
-                                    height: 80,
-                                    imageUrl: articles[index].imageUrl,
-                                    borderRadius: 5,
-                                  ),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                  .map(
+                    (tab) => ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: articles.length,
+                      itemBuilder: (context, index) {
+                        return InkWell(
+                          onTap: () {
+                            Navigator.pushNamed(
+                                context, ArticleScreen.routeName,
+                                arguments: articles[index]);
+                          },
+                          child: Row(
+                            children: [
+                              ImageContainer(
+                                margin: const EdgeInsets.all(10.0),
+                                width: 80,
+                                height: 80,
+                                imageUrl: articles[index].imageUrl,
+                                borderRadius: 5,
+                              ),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      articles[index].title,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.clip,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge!
+                                          .copyWith(
+                                              fontWeight: FontWeight.bold),
+                                    ),
+                                    const SizedBox(
+                                      height: 5,
+                                    ),
+                                    Row(
                                       children: [
-                                        Text(
-                                          articles[index].title,
-                                          maxLines: 2,
-                                          overflow: TextOverflow.clip,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyLarge!
-                                              .copyWith(
-                                                  fontWeight: FontWeight.bold),
+                                        const Icon(
+                                          Icons.schedule,
+                                          size: 18,
                                         ),
                                         const SizedBox(
-                                          height: 5,
+                                          width: 5,
                                         ),
-                                        Row(
-                                          children: [
-                                            const Icon(
-                                              Icons.schedule,
-                                              size: 18,
-                                            ),
-                                            const SizedBox(
-                                              width: 5,
-                                            ),
-                                            Text(
-                                              '${DateTime.now().difference(articles[index].createdAt).inHours} hours ago',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodySmall,
-                                            ),
-                                            const SizedBox(
-                                              width: 20,
-                                            ),
-                                            const Icon(
-                                              Icons.visibility,
-                                              size: 18,
-                                            ),
-                                            const SizedBox(
-                                              width: 5,
-                                            ),
-                                            Text(
-                                              '${articles[index].views} views',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodySmall,
-                                            ),
-                                          ],
+                                        Text(
+                                          '${DateTime.now().difference(articles[index].createdAt).inHours} hours ago',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall,
+                                        ),
+                                        const SizedBox(
+                                          width: 20,
+                                        ),
+                                        const Icon(
+                                          Icons.visibility,
+                                          size: 18,
+                                        ),
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(
+                                          '${articles[index].views} views',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall,
                                         ),
                                       ],
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            );
-                          },
-                        ),
-                      )
-                  .toList()),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  )
+                  .toList(),
+            ),
+          ),
         ),
       ],
     );
